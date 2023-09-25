@@ -48,15 +48,5 @@ declare module "vue-router" {
      * 默认为 false，为 true 时代表需要缓存，此时该路由和该页面都需要设置一致的 Name
      */
     keepAlive?: boolean
-    /**
-     * 添加一个字段用于存储服务器配置项
-     * 当设置该属性时会启动服务器
-     */
-    serverConfig?: {
-      // 服务器名称：
-      name: string
-      // 服务器启动命令
-      startCommand: string
-    }
   }
 }

@@ -55,33 +55,61 @@ export const constantRoutes: RouteRecordRaw[] = [
         name: "Dashboard",
         meta: {
           title: "首页",
-          elIcon: "House"
-          //svgIcon: "dashboard",
-          //affix: true
+          elIcon: "House",
+          affix: true
         }
       }
     ]
   },
   {
-    path: "/config-updater",
+    path: "/log-displayer",
     component: Layouts,
-    redirect: "/config-updater/index",
+    redirect: "/log-displayer/index",
     children: [
       {
         path: "index",
-        component: () => import("@/views/config-updater/index.vue"),
-        name: "ConfigUpdater",
+        component: () => import("@/views/log-displayer/index.vue"),
+        name: "LogDisplayer",
         meta: {
-          title: "配置文件生成",
-          elIcon: "Setting",
-          serverConfig: {
-            name: "ConfigUpdaterServer",
-            startCommand: "nodemon ../views/config-updater/server.js"
-          }
+          title: "日志显示",
+          elIcon: "Document"
         }
       }
     ]
   },
+  {
+    path: "/command-executer",
+    component: Layouts,
+    redirect: "/command-executer/index",
+    children: [
+      {
+        path: "index",
+        component: () => import("@/views/command-executer/index.vue"),
+        name: "CommandExecuter",
+        meta: {
+          title: "命令执行",
+          elIcon: "Postcard"
+        }
+      }
+    ]
+  },
+  {
+    path: "/cluster-resource-monitor",
+    component: Layouts,
+    redirect: "/cluster-resource-monitor/index",
+    children: [
+      {
+        path: "index",
+        component: () => import("@/views/cluster-resource-monitor/index.vue"),
+        name: "ClusterResourceMonitor",
+        meta: {
+          title: "集群资源监测",
+          elIcon: "Odometer"
+        }
+      }
+    ]
+  },
+  /*
   {
     path: "/unocss",
     component: Layouts,
@@ -98,31 +126,7 @@ export const constantRoutes: RouteRecordRaw[] = [
       }
     ]
   },
-  {
-    path: "/link",
-    meta: {
-      title: "外链",
-      svgIcon: "link"
-    },
-    children: [
-      {
-        path: "https://juejin.cn/post/7089377403717287972",
-        component: () => {},
-        name: "Link1",
-        meta: {
-          title: "中文文档"
-        }
-      },
-      {
-        path: "https://juejin.cn/column/7207659644487139387",
-        component: () => {},
-        name: "Link2",
-        meta: {
-          title: "新手教程"
-        }
-      }
-    ]
-  },
+  */
   {
     path: "/table",
     component: Layouts,
@@ -152,7 +156,8 @@ export const constantRoutes: RouteRecordRaw[] = [
         }
       }
     ]
-  },
+  }
+  /*
   {
     path: "/menu",
     component: Layouts,
@@ -269,6 +274,7 @@ export const constantRoutes: RouteRecordRaw[] = [
       }
     ]
   }
+  */
 ]
 
 /**
@@ -276,8 +282,26 @@ export const constantRoutes: RouteRecordRaw[] = [
  * 用来放置有权限 (Roles 属性) 的路由
  * 必须带有 Name 属性
  */
-
 export const asyncRoutes: RouteRecordRaw[] = [
+  {
+    path: "/config-updater",
+    component: Layouts,
+    redirect: "/config-updater/index",
+    meta: {
+      roles: ["admin"]
+    },
+    children: [
+      {
+        path: "index",
+        component: () => import("@/views/config-updater/index.vue"),
+        name: "ConfigUpdater",
+        meta: {
+          title: "配置文件生成",
+          elIcon: "Setting"
+        }
+      }
+    ]
+  },
   {
     path: "/permission",
     component: Layouts,
