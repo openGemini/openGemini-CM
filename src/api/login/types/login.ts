@@ -1,4 +1,3 @@
-/** 请求数据类型 */
 export interface LoginRequestData {
   /** admin 或 editor */
   username: "admin" | "editor"
@@ -8,7 +7,6 @@ export interface LoginRequestData {
   code: string
 }
 
-/** 响应数据类型 */
 export type LoginCodeResponseData = ApiResponseData<string>
 
 export type LoginResponseData = ApiResponseData<{ token: string }>

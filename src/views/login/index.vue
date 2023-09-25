@@ -2,11 +2,15 @@
 import { reactive, ref } from "vue"
 import { useRouter } from "vue-router"
 import { useUserStore } from "@/store/modules/user"
-import { type FormInstance, FormRules } from "element-plus"
+import { type FormInstance, FormRules, ElMessage } from "element-plus"
 import { User, Lock, Key, Picture, Loading } from "@element-plus/icons-vue"
 import { getLoginCodeApi } from "@/api/login"
 import { type LoginRequestData } from "@/api/login/types/login"
 import ThemeSwitch from "@/components/ThemeSwitch/index.vue"
+
+// 获取环境变量
+const loginPasswordForAdmin = import.meta.env.VITE_APP_LOGIN_PASSWORD_FOR_ADMIN
+const loginPasswordForEditor = import.meta.env.VITE_APP_LOGIN_PASSWORD_FOR_EDITOR
 
 const router = useRouter()
 
@@ -19,8 +23,8 @@ const loading = ref(false)
 const codeUrl = ref("")
 /** 登录表单数据 */
 const loginFormData: LoginRequestData = reactive({
-  username: "admin",
-  password: "12345678",
+  username: "editor",
+  password: "",
   code: ""
 })
 /** 登录表单校验规则 */
@@ -28,7 +32,7 @@ const loginFormRules: FormRules = {
   username: [{ required: true, message: "请输入用户名", trigger: "blur" }],
   password: [
     { required: true, message: "请输入密码", trigger: "blur" },
-    { min: 8, max: 16, message: "长度在 8 到 16 个字符", trigger: "blur" }
+    { min: 5, max: 16, message: "长度在 5 到 16 个字符", trigger: "blur" }
   ],
   code: [{ required: true, message: "请输入验证码", trigger: "blur" }]
 }
@@ -36,19 +40,26 @@ const loginFormRules: FormRules = {
 const handleLogin = () => {
   loginFormRef.value?.validate((valid: boolean, fields) => {
     if (valid) {
-      loading.value = true
-      useUserStore()
-        .login(loginFormData)
-        .then(() => {
-          router.push({ path: "/" })
-        })
-        .catch(() => {
-          createCode()
-          loginFormData.password = ""
-        })
-        .finally(() => {
-          loading.value = false
-        })
+      if (
+        (loginFormData.username === "editor" && loginFormData.password === loginPasswordForEditor) ||
+        (loginFormData.username === "admin" && loginFormData.password === loginPasswordForAdmin)
+      ) {
+        loading.value = true
+        useUserStore()
+          .login(loginFormData)
+          .then(() => {
+            router.push({ path: "/" })
+          })
+          .catch(() => {
+            //createCode()
+            loginFormData.password = ""
+          })
+          .finally(() => {
+            loading.value = false
+          })
+      } else {
+        ElMessage.error("密码错误，请重试！")
+      }
     } else {
       console.error("表单校验不通过", fields)
     }

@@ -1,6 +1,6 @@
 <template>
   <div class="app-container center">
-    <!--el-empty description="Editor 权限可见" /!-->
+    <el-empty description="Editor 权限可见" />
   </div>
 </template>
 

@@ -1,118 +1,56 @@
-<!--template>
-  <div>
-    <h1>opengemini.conf 文件内容</h1>
-    <div>
-      <label for="bindAddressInMeta">bind-address:</label>
-      <input type="text" id="bindAddressInMeta" v-model="newBindAddressInMeta" />
-    </div>
-    <div>
-      <label for="httpBindAddressInMeta">http-bind-address:</label>
-      <input type="text" id="httpBindAddressInMeta" v-model="newHttpBindAddressInMeta" />
-    </div>
-    <button @click="saveConfigFileContent">保存配置文件内容</button>
-  </div>
-</template!-->
-<template>
-  <div class="app-container">
-    <el-card v-loading="loading" shadow="never" class="search-wrapper">
-      <el-form ref="searchFormRef" :inline="true" :model="searchData">
-        <el-form-item prop="username" label="用户名">
-          <el-input v-model="searchData.username" placeholder="请输入" />
-        </el-form-item>
-        <el-form-item prop="phone" label="手机号">
-          <el-input v-model="searchData.phone" placeholder="请输入" />
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" :icon="Search" @click="handleSearch">查询</el-button>
-          <el-button :icon="Refresh" @click="resetSearch">重置</el-button>
-        </el-form-item>
-      </el-form>
-    </el-card>
-    <el-card v-loading="loading" shadow="never">
-      <div class="toolbar-wrapper">
-        <div>
-          <el-button type="primary" :icon="CirclePlus" @click="dialogVisible = true">新增用户</el-button>
-          <el-button type="danger" :icon="Delete">批量删除</el-button>
-        </div>
-        <div>
-          <el-tooltip content="下载">
-            <el-button type="primary" :icon="Download" circle />
-          </el-tooltip>
-          <el-tooltip content="刷新当前页">
-            <el-button type="primary" :icon="RefreshRight" circle @click="getTableData" />
-          </el-tooltip>
-        </div>
-      </div>
-      <div class="table-wrapper">
-        <el-table :data="tableData">
-          <el-table-column type="selection" width="50" align="center" />
-          <el-table-column prop="username" label="用户名" align="center" />
-          <el-table-column prop="roles" label="角色" align="center">
-            <template #default="scope">
-              <el-tag v-if="scope.row.roles === 'admin'" effect="plain">admin</el-tag>
-              <el-tag v-else type="warning" effect="plain">{{ scope.row.roles }}</el-tag>
-            </template>
-          </el-table-column>
-          <el-table-column prop="phone" label="手机号" align="center" />
-          <el-table-column prop="email" label="邮箱" align="center" />
-          <el-table-column prop="status" label="状态" align="center">
-            <template #default="scope">
-              <el-tag v-if="scope.row.status" type="success" effect="plain">启用</el-tag>
-              <el-tag v-else type="danger" effect="plain">禁用</el-tag>
-            </template>
-          </el-table-column>
-          <el-table-column prop="createTime" label="创建时间" align="center" />
-          <el-table-column fixed="right" label="操作" width="150" align="center">
-            <template #default="scope">
-              <el-button type="primary" text bg size="small" @click="handleUpdate(scope.row)">修改</el-button>
-              <el-button type="danger" text bg size="small" @click="handleDelete(scope.row)">删除</el-button>
-            </template>
-          </el-table-column>
-        </el-table>
-      </div>
-      <div class="pager-wrapper">
-        <el-pagination
-          background
-          :layout="paginationData.layout"
-          :page-sizes="paginationData.pageSizes"
-          :total="paginationData.total"
-          :page-size="paginationData.pageSize"
-          :currentPage="paginationData.currentPage"
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-        />
-      </div>
-    </el-card>
-    <!-- 新增/修改 -->
-    <el-dialog
-      v-model="dialogVisible"
-      :title="currentUpdateId === undefined ? '新增用户' : '修改用户'"
-      @close="resetForm"
-      width="30%"
-    >
-      <el-form ref="formRef" :model="formData" :rules="formRules" label-width="100px" label-position="left">
-        <el-form-item prop="username" label="用户名">
-          <el-input v-model="formData.username" placeholder="请输入" />
-        </el-form-item>
-        <el-form-item prop="password" label="密码" v-if="currentUpdateId === undefined">
-          <el-input v-model="formData.password" placeholder="请输入" />
-        </el-form-item>
-      </el-form>
-      <template #footer>
-        <el-button @click="dialogVisible = false">取消</el-button>
-        <el-button type="primary" @click="handleCreate">确认</el-button>
-      </template>
-    </el-dialog>
-  </div>
-</template>
-
-<script>
+<script lang="ts">
 export default {
   data() {
     return {
       configFileContent: "", //存储配置文件内容
-      newBindAddressInMeta: "", //存储新的 bind-address
-      newHttpBindAddressInMeta: "" //存储新的 https-bind-address
+
+      newMetaJoinInCommon1: "",
+      newMetaJoinInCommon2: "",
+      newMetaJoinInCommon3: "",
+
+      newBindAddressInMeta: "", //存储新的 [meta] bind-address
+      newHttpBindAddressInMeta: "",
+      newRpcBindAddressInMeta: "",
+      newDirInMeta: "",
+
+      newBindAddressInHttp: "",
+
+      newStoreIngestAddrInData: "",
+      newStoreSelectAddrInData: "",
+      newStoreDataDirInData: "",
+      newStoreWalDirInData: "",
+      newStoreMetaDirInData: "",
+
+      newBindAddressInGossip: "",
+      newStoreBindPortInGossip: "",
+      newMetaBindPortInGossip: "",
+      newMembersInGossip1: "",
+      newMembersInGossip2: "",
+      newMembersInGossip3: "",
+
+      defaultMetaJoinInCommon1: "{{meta_addr_1}}:8092",
+      defaultMetaJoinInCommon2: "{{meta_addr_2}}:8092",
+      defaultMetaJoinInCommon3: "{{meta_addr_3}}:8092",
+
+      defaultBindAddressInMeta: "{{addr}}:8088",
+      defaultHttpBindAddressInMeta: "{{addr}}:8091",
+      defaultRpcBindAddressInMeta: "{{addr}}:8092",
+      defaultDirInMeta: "/tmp/openGemini/data/meta/{{id}}",
+
+      defaultBindAddressInHttp: "{{addr}}:8086",
+
+      defaultStoreIngestAddrInData: "{{addr}}:8400",
+      defaultStoreSelectAddrInData: "{{addr}}:8401",
+      defaultStoreDataDirInData: "/tmp/openGemini/data",
+      defaultStoreWalDirInData: "/tmp/openGemini/data",
+      defaultStoreMetaDirInData: "/tmp/openGemini/data/meta/{{id}}",
+
+      defaultBindAddressInGossip: "{{addr}}",
+      defaultStoreBindPortInGossip: "8011",
+      defaultMetaBindPortInGossip: "8010",
+      defaultMembersInGossip1: "{{meta_addr_1}}:8010",
+      defaultMembersInGossip2: "{{meta_addr_2}}:8010",
+      defaultMembersInGossip3: "{{meta_addr_3}}:8010"
     }
   },
   created() {
@@ -142,25 +80,51 @@ export default {
         if (response.ok) {
           const data = await response.text()
 
-          /*
-          //使用正则表达式提取 [meta] 部分的 bind-address
-          const bindAddressRegexInMeta = /\[meta\][\s\S]*?bind-address\s*=\s*"(.*?)"/;
-          const bindAddressMatchInMeta = data.match(bindAddressRegexInMeta);
-          if (bindAddressMatchInMeta) {
-            this.newBindAddress = bindAddressMatchInMeta[1];
+          const regexInCommon = /\[common\][\s\S]*?meta-join\s*=\s*\["([^"]*)",\s*"([^"]*)",\s*"([^"]*)"\]/
+          const regexMatchInCommon = data.match(regexInCommon)
+          if (regexMatchInCommon && regexMatchInCommon.length >= 4) {
+            this.newMetaJoinInCommon1 = regexMatchInCommon[1]
+            this.newMetaJoinInCommon2 = regexMatchInCommon[2]
+            this.newMetaJoinInCommon3 = regexMatchInCommon[3]
           }
-          //使用正则表达式提取 [meta] 部分的 http-bind-address
-          const httpBindAddressRegexInMeta = /\[meta\][\s\S]*?http-bind-address\s*=\s*"(.*?)"/;
-          const httpBindAddressMatchInMeta = data.match(httpBindAddressRegexInMeta);
-          if(httpBindAddressMatchInMeta) {
-            this.newHttpBindAddress = httpBindAddressMatchInMeta[1];
-          }
-          */
-          const regexInMeta = /\[meta\][\s\S]*?bind-address\s*=\s*"([^"]*)"\s*http-bind-address\s*=\s*"([^"]*)"/
+
+          const regexInMeta =
+            /\[meta\][\s\S]*?bind-address\s*=\s*"([^"]*)"\s*http-bind-address\s*=\s*"([^"]*)"\s*rpc-bind-address\s*=\s*"([^"]*)"\s*dir\s*=\s*"([^"]*)"/
           const regexMatchInMeta = data.match(regexInMeta)
-          if (regexMatchInMeta && regexMatchInMeta.length >= 3) {
+          if (regexMatchInMeta && regexMatchInMeta.length >= 5) {
             this.newBindAddressInMeta = regexMatchInMeta[1]
             this.newHttpBindAddressInMeta = regexMatchInMeta[2]
+            this.newRpcBindAddressInMeta = regexMatchInMeta[3]
+            this.newDirInMeta = regexMatchInMeta[4]
+          }
+
+          const regexInHttp = /\[http\][\s\S]*?bind-address\s*=\s*"([^"]*)"/
+          const regexMatchInHttp = data.match(regexInHttp)
+          if (regexMatchInHttp && regexMatchInHttp.length >= 2) {
+            this.newBindAddressInHttp = regexMatchInHttp[1]
+          }
+
+          const regexInData =
+            /\[data\][\s\S]*?store-ingest-addr\s*=\s*"([^"]*)"\s*store-select-addr\s*=\s*"([^"]*)"\s*store-data-dir\s*=\s*"([^"]*)"\s*store-wal-dir\s*=\s*"([^"]*)"\s*store-meta-dir\s*=\s*"([^"]*)"/
+          const regexMatchInData = data.match(regexInData)
+          if (regexMatchInData && regexMatchInData.length >= 6) {
+            this.newStoreIngestAddrInData = regexMatchInData[1]
+            this.newStoreSelectAddrInData = regexMatchInData[2]
+            this.newStoreDataDirInData = regexMatchInData[3]
+            this.newStoreWalDirInData = regexMatchInData[4]
+            this.newStoreMetaDirInData = regexMatchInData[5]
+          }
+
+          const regexInGossip =
+            /\[gossip\][\s\S]*?bind-address\s*=\s*"([^"]*)"\s*store-bind-port\s*=\s*(\S*)\s*meta-bind-port\s*=\s*(\S*)[\s\S]*?members\s*=\s*\["([^"]*)",\s*"([^"]*)",\s*"([^"]*)"\]/
+          const regexMatchInGossip = data.match(regexInGossip)
+          if (regexMatchInGossip && regexMatchInGossip.length >= 7) {
+            this.newBindAddressInGossip = regexMatchInGossip[1]
+            this.newStoreBindPortInGossip = regexMatchInGossip[2]
+            this.newMetaBindPortInGossip = regexMatchInGossip[3]
+            this.newMembersInGossip1 = regexMatchInGossip[4]
+            this.newMembersInGossip2 = regexMatchInGossip[5]
+            this.newMembersInGossip3 = regexMatchInGossip[6]
           }
         } else {
           console.error("Failed to fetch configuration file:", response.status, response.statusText)
@@ -177,12 +141,34 @@ export default {
             "Content-Type": "application/json"
           },
           body: JSON.stringify({
+            metaJoinInCommon1: this.newMetaJoinInCommon1,
+            metaJoinInCommon2: this.newMetaJoinInCommon2,
+            metaJoinInCommon3: this.newMetaJoinInCommon3,
+
             bindAddressInMeta: this.newBindAddressInMeta,
-            httpBindAddressInMeta: this.newHttpBindAddressInMeta
+            httpBindAddressInMeta: this.newHttpBindAddressInMeta,
+            rpcBindAddressInMeta: this.newRpcBindAddressInMeta,
+            dirInMeta: this.newDirInMeta,
+
+            bindAddressInHttp: this.newBindAddressInHttp,
+
+            storeIngestAddrInData: this.newStoreIngestAddrInData,
+            storeSelectAddrInData: this.newStoreSelectAddrInData,
+            storeDataDirInData: this.newStoreDataDirInData,
+            storeWalDirInData: this.newStoreWalDirInData,
+            storeMetaDirInData: this.newStoreMetaDirInData,
+
+            bindAddressInGossip: this.newBindAddressInGossip,
+            storeBindPortInGossip: this.newStoreBindPortInGossip,
+            metaBindPortInGossip: this.newMetaBindPortInGossip,
+            membersInGossip1: this.newMembersInGossip1,
+            membersInGossip2: this.newMembersInGossip2,
+            membersInGossip3: this.newMembersInGossip3
           })
         })
 
         if (response.ok) {
+          this.showSuccessMessage("保存配置文件成功！")
           console.log("Configuration file saved successfully.")
         } else {
           console.error("Failed to save configuration file:", response.status, response.statusText)
@@ -190,14 +176,259 @@ export default {
       } catch (error) {
         console.error("Error saving configuration file:", error)
       }
+    },
+    restoreDefaultSettings() {
+      this.newMetaJoinInCommon1 = this.defaultMetaJoinInCommon1
+      this.newMetaJoinInCommon2 = this.defaultMetaJoinInCommon2
+      this.newMetaJoinInCommon3 = this.defaultMetaJoinInCommon3
+
+      this.newBindAddressInMeta = this.defaultBindAddressInMeta
+      this.newHttpBindAddressInMeta = this.defaultHttpBindAddressInMeta
+      this.newRpcBindAddressInMeta = this.defaultRpcBindAddressInMeta
+
+      this.newBindAddressInHttp = this.defaultBindAddressInHttp
+
+      this.newStoreIngestAddrInData = this.defaultStoreIngestAddrInData
+      this.newStoreSelectAddrInData = this.defaultStoreSelectAddrInData
+      this.newStoreDataDirInData = this.defaultStoreDataDirInData
+      this.newStoreWalDirInData = this.defaultStoreWalDirInData
+      this.newStoreMetaDirInData = this.defaultStoreMetaDirInData
+
+      this.newBindAddressInGossip = this.defaultBindAddressInGossip
+      this.newStoreBindPortInGossip = this.defaultStoreBindPortInGossip
+      this.newMetaBindPortInGossip = this.defaultMetaBindPortInGossip
+      this.newMembersInGossip1 = this.defaultMembersInGossip1
+      this.newMembersInGossip2 = this.defaultMembersInGossip2
+      this.newMembersInGossip3 = this.defaultMembersInGossip3
+
+      this.showSuccessMessage("恢复默认设置成功！")
+      this.saveConfigFileContent()
+    },
+    async showSuccessMessage(message: any) {
+      this.$message.success(message)
     }
   }
 }
 </script>
 
+<template>
+  <div class="app-container">
+    <el-card shadow="always" class="card-wrapper" header="common" font-size="20px">
+      <el-form label-width="250px">
+        <el-form-item label="meta-join">
+          <el-row>
+            <el-col :span="7">
+              <el-input type="text" id="metaJoinInCommon1" v-model="newMetaJoinInCommon1" placeholder="请输入" />
+            </el-col>
+            <el-col :span="1" class="comma">,</el-col>
+            <el-col :span="7">
+              <el-input type="text" id="metaJoinInCommon2" v-model="newMetaJoinInCommon2" placeholder="请输入" />
+            </el-col>
+            <el-col :span="1" class="comma">,</el-col>
+            <el-col :span="7">
+              <el-input type="text" id="metaJoinInCommon3" v-model="newMetaJoinInCommon3" placeholder="请输入" />
+            </el-col>
+          </el-row>
+        </el-form-item>
+      </el-form>
+    </el-card>
+
+    <el-card shadow="always" class="card-wrapper" header="meta" font-size="20px">
+      <el-form label-width="250px">
+        <el-form-item label="bind-address">
+          <el-input
+            class="custom-input"
+            type="text"
+            id="bindAddressInMeta"
+            v-model="newBindAddressInMeta"
+            placeholder="请输入"
+          />
+        </el-form-item>
+      </el-form>
+      <el-form label-width="250px">
+        <el-form-item label="http-bind-address">
+          <el-input
+            class="custom-input"
+            type="text"
+            id="httpBindAddressInMeta"
+            v-model="newHttpBindAddressInMeta"
+            placeholder="请输入"
+          />
+        </el-form-item>
+      </el-form>
+      <el-form label-width="250px">
+        <el-form-item label="rpc-bind-address">
+          <el-input
+            class="custom-input"
+            type="text"
+            id="rpcBindAddressInMeta"
+            v-model="newRpcBindAddressInMeta"
+            placeholder="请输入"
+          />
+        </el-form-item>
+      </el-form>
+      <el-form label-width="250px">
+        <el-form-item label="dir">
+          <el-input class="custom-input" type="text" id="dirInMeta" v-model="newDirInMeta" placeholder="请输入" />
+        </el-form-item>
+      </el-form>
+    </el-card>
+
+    <el-card shadow="always" class="card-wrapper" header="http" font-size="20px">
+      <el-form label-width="250px">
+        <el-form-item label="bind-address">
+          <el-input
+            class="custom-input"
+            type="text"
+            id="bindAddressInHttp"
+            v-model="newBindAddressInHttp"
+            placeholder="请输入"
+          />
+        </el-form-item>
+      </el-form>
+    </el-card>
+
+    <el-card shadow="always" class="card-wrapper" header="data" font-size="20px">
+      <el-form label-width="250px">
+        <el-form-item label="store-ingest-addr">
+          <el-input
+            class="custom-input"
+            type="text"
+            id="storeIngestAddrInData"
+            v-model="newStoreIngestAddrInData"
+            placeholder="请输入"
+          />
+        </el-form-item>
+      </el-form>
+      <el-form label-width="250px">
+        <el-form-item label="store-select-addr">
+          <el-input
+            class="custom-input"
+            type="text"
+            id="storeSelectAddrInData"
+            v-model="newStoreSelectAddrInData"
+            placeholder="请输入"
+          />
+        </el-form-item>
+      </el-form>
+      <el-form label-width="250px">
+        <el-form-item label="store-data-dir">
+          <el-input
+            class="custom-input"
+            type="text"
+            id="storeDataDirInData"
+            v-model="newStoreDataDirInData"
+            placeholder="请输入"
+          />
+        </el-form-item>
+      </el-form>
+      <el-form label-width="250px">
+        <el-form-item label="store-wal-dir">
+          <el-input
+            class="custom-input"
+            type="text"
+            id="storeWalDirInData"
+            v-model="newStoreWalDirInData"
+            placeholder="请输入"
+          />
+        </el-form-item>
+      </el-form>
+      <el-form label-width="250px">
+        <el-form-item label="store-meta-dir">
+          <el-input
+            class="custom-input"
+            type="text"
+            id="storeMetaDirInData"
+            v-model="newStoreMetaDirInData"
+            placeholder="请输入"
+          />
+        </el-form-item>
+      </el-form>
+    </el-card>
+
+    <el-card shadow="always" class="card-wrapper" header="gossip" font-size="20px">
+      <el-form label-width="250px">
+        <el-form-item label="bind-address">
+          <el-input
+            class="custom-input"
+            type="text"
+            id="bindAddressInGossip"
+            v-model="newBindAddressInGossip"
+            placeholder="请输入"
+          />
+        </el-form-item>
+      </el-form>
+      <el-form label-width="250px">
+        <el-form-item label="store-bind-port">
+          <el-input
+            class="custom-input"
+            type="text"
+            id="storeBindPortInGossip"
+            v-model="newStoreBindPortInGossip"
+            placeholder="请输入"
+          />
+        </el-form-item>
+      </el-form>
+      <el-form label-width="250px">
+        <el-form-item label="meta-bind-port">
+          <el-input
+            class="custom-input"
+            type="text"
+            id="metaBindPortInGossip"
+            v-model="newMetaBindPortInGossip"
+            placeholder="请输入"
+          />
+        </el-form-item>
+      </el-form>
+      <el-form label-width="250px">
+        <el-form-item label="members">
+          <el-row>
+            <el-col :span="7">
+              <el-input type="text" id="membersInGossip1" v-model="newMembersInGossip1" placeholder="请输入" />
+            </el-col>
+            <el-col :span="1" class="comma">,</el-col>
+            <el-col :span="7">
+              <el-input type="text" id="membersInGossip2" v-model="newMembersInGossip2" placeholder="请输入" />
+            </el-col>
+            <el-col :span="1" class="comma">,</el-col>
+            <el-col :span="7">
+              <el-input type="text" id="membersInGossip3" v-model="newMembersInGossip3" placeholder="请输入" />
+            </el-col>
+          </el-row>
+        </el-form-item>
+      </el-form>
+    </el-card>
+
+    <div class="button-wrapper">
+      <el-button type="primary" @click="saveConfigFileContent">保存配置文件</el-button>
+      <el-button type="primary" @click="restoreDefaultSettings">恢复默认设置</el-button>
+    </div>
+  </div>
+</template>
+
 <style>
-/* 修改输入框的宽度 */
-input {
-  width: 100%;
+.card-wrapper {
+  margin-bottom: 20px;
+  :deep(.el-card__body) {
+    padding-bottom: 2px;
+  }
+}
+
+.custom-input {
+  width: 250px;
+}
+
+.comma {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 19px;
+  color: hsl(0, 1%, 38%);
+}
+
+.button-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 50px;
 }
 </style>

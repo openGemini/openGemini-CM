@@ -13,6 +13,7 @@
   },
   "scripts": {
     "dev": "vite",
+    "start": "concurrently \"pnpm dev\" \"nodemon src/views/config-updater/server.js\"",
     "build:stage": "vue-tsc --noEmit && vite build --mode staging",
     "build:prod": "vue-tsc --noEmit && vite build",
     "preview:stage": "pnpm build:stage && vite preview",
@@ -21,8 +22,7 @@
     "lint:prettier": "prettier --write \"{src,tests,types}/**/*.{vue,js,jsx,ts,tsx,json,css,less,scss,html,md}\"",
     "lint": "pnpm lint:eslint && pnpm lint:prettier",
     "prepare": "husky install",
-    "test": "vitest",
-    "serve-server": "node ./src/views/config-updater/server.js"
+    "test": "vitest"
   },
   "dependencies": {
     "@element-plus/icons-vue": "2.1.0",
