@@ -111,8 +111,8 @@ export default {
           const results = response.data.results[0]
           if (results && results.series) {
             this.tableHeader = results.series[0].columns
-            this.tableData = results.series[0].values.map((row) => {
-              return results.series[0].columns.reduce((rowData: RowData, columnName: string, index: number) => {
+            this.tableData = results.series[0].values.map((row: any[]) => {
+              return results.series[0].columns.reduce((rowData: any, columnName: string, index: number) => {
                 rowData[columnName] = row[index]
                 return rowData
               }, {})
