@@ -3,7 +3,7 @@ import { reactive, ref } from "vue"
 import { useRouter } from "vue-router"
 import { useUserStore } from "@/store/modules/user"
 import { type FormInstance, FormRules, ElMessage } from "element-plus"
-import { User, Lock, Key, Picture, Loading } from "@element-plus/icons-vue"
+import { User, Lock } from "@element-plus/icons-vue"
 import { getLoginCodeApi } from "@/api/login"
 import { type LoginRequestData } from "@/api/login/types/login"
 import ThemeSwitch from "@/components/ThemeSwitch/index.vue"
@@ -109,32 +109,6 @@ createCode()
               size="large"
               show-password
             />
-          </el-form-item>
-          <el-form-item prop="code">
-            <el-input
-              v-model.trim="loginFormData.code"
-              placeholder="验证码"
-              type="text"
-              tabindex="3"
-              :prefix-icon="Key"
-              maxlength="7"
-              size="large"
-            >
-              <template #append>
-                <el-image :src="codeUrl" @click="createCode" draggable="false">
-                  <template #placeholder>
-                    <el-icon>
-                      <Picture />
-                    </el-icon>
-                  </template>
-                  <template #error>
-                    <el-icon>
-                      <Loading />
-                    </el-icon>
-                  </template>
-                </el-image>
-              </template>
-            </el-input>
           </el-form-item>
           <el-button :loading="loading" type="primary" size="large" @click.prevent="handleLogin">登 录</el-button>
         </el-form>
