@@ -94,6 +94,22 @@ export const constantRoutes: RouteRecordRaw[] = [
     ]
   },
   {
+    path: "/cluster-basic-information",
+    component: Layouts,
+    redirect: "/cluster-basic-information/index",
+    children: [
+      {
+        path: "index",
+        component: () => import("@/views/cluster-basic-information/index.vue"),
+        name: "ClusterBasicInformation",
+        meta: {
+          title: "集群基本信息",
+          elIcon: "Tickets"
+        }
+      }
+    ]
+  },
+  {
     path: "/cluster-resource-monitor",
     component: Layouts,
     redirect: "/cluster-resource-monitor/index",
