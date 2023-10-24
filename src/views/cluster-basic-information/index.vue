@@ -78,22 +78,6 @@ export default {
           console.error("Error fetching data:", error)
         })
     },
-    async startServer() {
-      try {
-        // 向后端发送请求以触发服务器的启动
-        const response = await fetch("http://localhost:8091/start-server", {
-          method: "POST"
-        })
-
-        if (response.ok) {
-          console.log("Server started successfully.")
-        } else {
-          console.error("Failed to start server:", response.status, response.statusText)
-        }
-      } catch (error) {
-        console.error("Error starting server:", error)
-      }
-    },
     async checkNode() {
       //try {
       //const response = await fetch("http://127.0.0.1:8091/getdata")

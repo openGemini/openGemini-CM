@@ -4,14 +4,20 @@ const path = require("path")
 const cors = require("cors")
 const bodyParser = require("body-parser")
 const app = express()
-const port = 8086
+const port = 30000
 
 // 设置当前工作目录为与src目录同级的目录
 const currentDirectory = path.join(__dirname, "etc/openGemini.conf")
 
 app.use(
   cors({
-    origin: ["http://localhost:3333", "http://192.168.128.1:3333", "http://172.22.49.211:3333"]
+    origin: [
+      "http://localhost:3333",
+      "http://219.216.65.83:3333",
+      "http://169.254.95.120:3333",
+      "http://172.17.0.1:3333",
+      "http://172.18.0.1:3333"
+    ]
   })
 )
 

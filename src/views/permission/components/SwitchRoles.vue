@@ -88,7 +88,14 @@ const handleBeforeClose = (done: () => void) => {
       width="25%"
       :before-close="handleBeforeClose"
     >
-      <el-input class="el-dialog-body" type="password" v-model="adminInfo" placeholder="请输入验证密码" show-password />
+      <el-input
+        class="el-dialog-body"
+        type="password"
+        v-model="adminInfo"
+        placeholder="请输入验证密码"
+        show-password
+        @keyup.enter="submitAdminInfo"
+      />
       <template v-if="adminDialogVisible">
         <div class="dialog-footer">
           <el-button @click="cancelAdminSwitch">取消</el-button>

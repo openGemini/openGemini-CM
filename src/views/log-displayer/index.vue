@@ -21,18 +21,18 @@
           </div>
         </div>
         <div class="bottom-container">
-          <div class="input-container">  
+          <div class="input-container">
             <el-form-item label="起始时间" prop="searchStartTime">
               <el-date-picker
-                  v-model="formData.searchStartTime"
-                  type="datetime"
-                  placeholder="输入起始时间"
-                  format="YYYY/MM/DD hh:mm:ss"
-                  value-format="'YYYY-MM-DDThh:mm:ss[Z]'"
+                v-model="formData.searchStartTime"
+                type="datetime"
+                placeholder="输入起始时间"
+                format="YYYY/MM/DD hh:mm:ss"
+                value-format="'YYYY-MM-DDThh:mm:ss[Z]'"
               />
             </el-form-item>
           </div>
-          <div class="input-container">  
+          <div class="input-container">
             <el-form-item label="终止时间" prop="searchEndTime">
               <el-date-picker
                 v-model="formData.searchEndTime"
@@ -41,7 +41,7 @@
                 format="YYYY/MM/DD hh:mm:ss"
                 value-format="'YYYY-MM-DDThh:mm:ss[Z]'"
               />
-          </el-form-item>
+            </el-form-item>
           </div>
         </div>
         <div class="button-container">
@@ -55,12 +55,8 @@
       </el-form>
     </el-card>
     <!-- 表格内容 -->
-    <el-card shadow="always" class="card-wrapper">    
-      <el-table 
-        :data="displayedData" 
-        @sort-change="fetchData" 
-        border 
-        style="width: 100%">
+    <el-card shadow="always" class="card-wrapper">
+      <el-table :data="displayedData" @sort-change="fetchData" border style="width: 100%">
         <el-table-column :prop="item" :label="item" v-for="item in tableHeader" :sortable="'custom'" :key="item" />
       </el-table>
       <!-- 分页 -->
@@ -132,20 +128,19 @@ export default {
       //console.log(column);
       //console.log(column.prop);
       //console.log(column.order);
-      if(column != undefined){
+      if (column != undefined) {
         if ("" != column.prop && null != column.prop) {
-          console.log(column.prop);
-          console.log(column.order);
-          querySql += " " + " order by " + column.prop;
-          if(column.order == 'ascending'){
-            querySql += " " + " ASC ";
-          }
-          else if(column.order == 'descending'){
-            querySql += " " + " DESC ";
+          console.log(column.prop)
+          console.log(column.order)
+          querySql += " " + " order by " + column.prop
+          if (column.order == "ascending") {
+            querySql += " " + " ASC "
+          } else if (column.order == "descending") {
+            querySql += " " + " DESC "
           }
         }
       }
-      console.log(querySql);
+      console.log(querySql)
 
       axios
         .get(apiUrl, {
@@ -201,7 +196,6 @@ export default {
 </script>
 
 <style scoped>
-
 .card-wrapper {
   margin-bottom: 20px;
   :deep(.el-card__body) {

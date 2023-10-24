@@ -61,7 +61,7 @@ export default {
     async startServer() {
       try {
         // 向后端发送请求以触发服务器的启动
-        const response = await fetch("http://localhost:8086/start-server", {
+        const response = await fetch("http://localhost:30000/start-server", {
           method: "POST"
         })
 
@@ -76,7 +76,7 @@ export default {
     },
     async loadConfigFileContent() {
       try {
-        const response = await fetch("http://localhost:8086/get-config-file-content")
+        const response = await fetch("http://localhost:30000/get-config-file-content")
         if (response.ok) {
           const data = await response.text()
 
@@ -135,7 +135,7 @@ export default {
     },
     async saveConfigFileContent() {
       try {
-        const response = await fetch("http://localhost:8086/save-config-file-content", {
+        const response = await fetch("http://localhost:30000/save-config-file-content", {
           method: "POST",
           headers: {
             "Content-Type": "application/json"
