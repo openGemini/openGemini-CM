@@ -93,6 +93,7 @@ export const constantRoutes: RouteRecordRaw[] = [
       }
     ]
   },
+  /*
   {
     path: "/cluster-basic-information",
     component: Layouts,
@@ -109,6 +110,7 @@ export const constantRoutes: RouteRecordRaw[] = [
       }
     ]
   },
+  */
   {
     path: "/cluster-resource-monitor",
     component: Layouts,
