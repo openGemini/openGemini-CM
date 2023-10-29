@@ -53,6 +53,7 @@ sudo bash scripts/install_monitor.sh
 The normal results are shown as follows:
 
 ![monitor中表的正常显示情况](https://github.com/25hours886/image/blob/main/openGemini-image/monitor%E4%B8%AD%E8%A1%A8%E7%9A%84%E6%AD%A3%E5%B8%B8%E6%98%BE%E7%A4%BA%E6%83%85%E5%86%B5.png)
+
 3. Start the project
 ```
 pnpm start
