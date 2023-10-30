@@ -12,8 +12,8 @@ This project adopts the open-source mid to backend management system basic solut
 ## Environmental Information
 1. [VSCode](https://code.visualstudio.com/Download) version v1.77+
 2. Install the recommended plugins in the. vscode directory with one click (VSCode will automatically pop up a window asking if to install the recommended extensions for this warehouse project, click Install to proceed)
-3. [Node.js](https://nodejs.org/en/download) version v16+
-4. Execute npm install pnpm@8.9.2, install version 8.9.2 of pnpm
+3. [Node.js](https://nodejs.org/en/download) version v16.14+
+4. Execute npm install pnpm@8.7.4, install version 8.7.4 of pnpm
 
 ## Installation dependencies
 Install dependencies such as element plus (icon component library), axios (making HTTP requests), cors (handling cross domain requests), echarts (providing visual icons), and express (building web servers and APIs) required for the project.
@@ -30,6 +30,60 @@ cd openGemini-CM
 pnpm i
 ```
 At this point, the development environment configuration has been completed and secondary development can proceed
+
+# Operating Environment
+The running environment takes Linux as an example:
+1. Install Node.js version 16.14.0
+```
+curl -o node-v16.14.0-linux-x64.tar.xz https://nodejs.org/dist/v16.14.0/node-v16.14.0-linux-x64.tar.xz
+```
+2.  After the download is complete, extract the downloaded archive
+```
+tar -xvf node-v16.14.0-linux-x64.tar.xz
+```
+3. Move the extracted Node.js directory to the /usr/local directory
+```
+sudo mv node-v16.14.0-linux-x64 /usr/local/nodejs
+```
+4. Configure environment variables. Execute the following command to edit the ~/.bashrc file
+```
+nano ~/.bashrc
+```
+Then, add the following lines to the end of the file
+```
+export PATH="/usr/local/nodejs/bin:$PATH"
+```
+Press Ctrl + X to bring up the prompt, press Y to save the file changes. If you see "File Name to Write: .bashrc" in the prompt, press Enter to save the file successfully
+5. Execute the following command to make the edited .bashrc file take effect
+```
+source ~/.bashrc
+```
+6. Run the following command to verify if Node.js has been successfully installed
+```
+node -v
+```
+If it displays v16.14.0, the installation was successful
+7. Install pnpm, run the following command
+```
+pnpm -v
+```
+If you encounter an error message like "pnpm: command not found" execute
+```
+npm install -g pnpm
+```
+8. Navigate to the directory where you want to store the project and clone it
+```
+git clone https://github.com/openGemini/openGemini-CM.git
+```
+9. Enter the project directory
+```
+cd openGemini-CM
+```
+10. Run the project startup script
+```
+bash install_de.sh
+bash run_preview.sh
+```
 
 # Service startup
 

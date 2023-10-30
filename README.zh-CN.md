@@ -12,8 +12,8 @@
 ## 环境信息
 1. [VSCode](https://code.visualstudio.com/Download) version v1.77+
 2. 一键安装 .vscode 目录中推荐的插件(VSCode 会自动弹出窗口询问是否为此仓库安装项目所推荐的扩展,点击安装即可)
-3. [Node.js](https://nodejs.org/en/download) version v16+
-4. 执行 npm install pnpm@8.9.2，安装版本号为8.9.2的 pnpm
+3. [Node.js](https://nodejs.org/en/download) version v16.14+
+4. 执行 npm install pnpm@8.7.4，安装版本号为8.7.4的 pnpm
 
 ## 安装依赖
 安装项目所需的 element-plus（图标组件库）、axios（进行 HTTP 请求）、cors（处理跨域请求）、echarts（提供可视化图标）、express（构建 Web 服务器和 API）等依赖项。
@@ -30,6 +30,61 @@ cd openGemini-CM
 pnpm i
 ```
 至此，已完成开发环境配置，可进行二次开发
+
+# 运行环境
+该运行环境以 Linux 为例：
+
+1. 安装版本号为 16.14.0 的nodejs
+```
+curl -o node-v16.14.0-linux-x64.tar.xz https://nodejs.org/dist/v16.14.0/node-v16.14.0-linux-x64.tar.xz
+```
+2. 下载完成后，解压缩下载的压缩包
+```
+tar -xvf node-v16.14.0-linux-x64.tar.xz
+```
+3. 将解压缩后的 Node.js 目录移动到 /usr/local 目录
+```
+sudo mv node-v16.14.0-linux-x64 /usr/local/nodejs
+```
+4. 配置环境变量，执行以下命令编辑 ~/.bashrc 文件
+```
+nano ~/.bashrc
+```
+并在文件末尾添加以下行
+```
+export PATH="/usr/local/nodejs/bin:$PATH"
+```
+按下 Ctrl + X 出现提示，按下 Y 保存文件修改，如果在提示中看到 File Name to Write: .bashrc，按下 Enter 保存文件成功
+5. 执行以下命令使编辑的 .bashrc 文件生效
+```
+source ~/.bashrc
+```
+6. 运行以下命令验证 Node.js 是否已成功安装：
+```
+node -v
+```
+出现 v16.14.0 即成功安装
+7. 安装 pnpm，执行
+```
+pnpm -v
+```
+若显示类似 pnpm: command not found 的错误信息，执行
+```
+npm install -g pnpm
+```
+8. 进入存放项目的目录，并克隆项目
+```
+git clone https://github.com/openGemini/openGemini-CM.git
+```
+9. 进入项目目录
+```
+cd openGemini-CM
+```
+10. 运行项目启动脚本
+```
+bash install_de.sh
+bash run_preview.sh
+```
 
 # 服务启动
 
