@@ -7,16 +7,25 @@
 # 简介
 本项目采用了开源的中后台管理系统基础解决方案 V3 Admin Vite，实现了 openGemini 的集群管理工具开发，体现形式为 WEB，具体功能包括集群基本信息显示、集群资源监控、配置文件生成、日志显示、命令执行等。
 
+# 部署架构
+![openGemini架构图](https://github.com/25hours886/image/blob/main/openGemini-image/openGemini%E6%9E%B6%E6%9E%84.png)
+
+集群管理工具部署在管理节点上，该节点同时还部署单机的 openGemini 时序数据库，用于存储 openGemini 业务集群的各项监控指标，比如节点资源监控指标（cpu、内存、磁盘I/O），错误日志等。上述指标数据是通过 ts-monitor 工具采集并写入管理节点的数据库中，监控工具从中查询基本的集群运行状态信息，通过关键字检索库内错误日志并回显。
+
 # 开发环境
 
 ## 环境信息
 1. [VSCode](https://code.visualstudio.com/Download) version v1.77+
-2. 一键安装 .vscode 目录中推荐的插件(VSCode 会自动弹出窗口询问是否为此仓库安装项目所推荐的扩展,点击安装即可)
-3. [Node.js](https://nodejs.org/en/download) version v16.14+
-4. 执行 npm install pnpm@8.7.4，安装版本号为8.7.4的 pnpm
+2. [Node.js](https://nodejs.org/en/download) version v16.14+
+3. pnpm version v8.7.4
+```
+npm install pnpm@8.7.4
+```
 
 ## 安装依赖
 安装项目所需的 element-plus（图标组件库）、axios（进行 HTTP 请求）、cors（处理跨域请求）、echarts（提供可视化图标）、express（构建 Web 服务器和 API）等依赖项。
+
+### 组件依赖
 1. 克隆项目
 ```
 git clone https://github.com/openGemini/openGemini-CM.git
@@ -29,12 +38,17 @@ cd openGemini-CM
 ```
 pnpm i
 ```
+
+### 安装插件（可选）
+使用 VSCode 打开项目主目录，VSCode 会自动弹出窗口询问是否为此仓库安装项目所推荐的扩展，点击安装即可。
+插件路径为 .vscode/extensions.json，包括 ESLint、Prettier、Volar等。
+
 至此，已完成开发环境配置，可进行二次开发
 
 # 运行环境
 该运行环境以 Linux 为例：
 
-1. 安装版本号为 16.14.0 的nodejs
+1. 安装版本号为 16.14.0 的 nodejs
 ```
 curl -o node-v16.14.0-linux-x64.tar.xz https://nodejs.org/dist/v16.14.0/node-v16.14.0-linux-x64.tar.xz
 ```
@@ -88,11 +102,7 @@ bash run_preview.sh
 
 # 服务启动
 
-![openGemini架构图](https://github.com/25hours886/image/blob/main/openGemini-image/openGemini%E6%9E%B6%E6%9E%84.png)
-
-集群管理工具部署在管理节点上，该节点同时还部署单机的 openGemini 时序数据库，用于存储 openGemini 业务集群的各项监控指标，比如节点资源监控指标（cpu、内存、磁盘I/O），错误日志等。上述指标数据是通过 ts-monitor 工具采集并写入管理节点的数据库中，监控工具从中查询基本的集群运行状态信息，通过关键字检索库内错误日志并回显。
-
-## 以单机部署的 openGemini 集群和监控举例：
+按照部署架构拉起 openGemini 集群和指标采集工具 ts-monitor，以单机部署 openGemini 集群监控为例：
 1. 进入项目目录启动 openGemini 数据库
 ```
 sudo bash scripts/install_cluster.sh
@@ -152,5 +162,5 @@ CPU利用率(%)如下：
 ![配置文件生成](https://github.com/25hours886/image/blob/main/openGemini-image/%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E7%94%9F%E6%88%90.png)
 对配置项进行修改后，点击“保存配置文件”。或恢复默认配置文件。
 
-# 证书
+# LICENSE
 [Apache 2.0 许可证](./LICENSE)

@@ -7,16 +7,26 @@
 # Introduction
 This project adopts the open-source mid to backend management system basic solution V3 Admin Vite, and implements the development of cluster management tools for openGemini in the form of WEB. The specific functions include displaying basic cluster information, monitoring cluster resources, generating configuration files, displaying logs, and executing commands.
 
+# Deployment Architecture
+
+![openGemini架构图](https://github.com/25hours886/image/blob/main/openGemini-image/openGemini%E6%9E%B6%E6%9E%84.png)
+
+The cluster management tool is deployed on the management node, which also deploys a standalone OpenGemini temporal database to store various monitoring indicators of the OpenGemini business cluster, such as node resource monitoring indicators (CPU, memory, disk I/O), error logs, etc. The above indicator data is collected and written into the database of the management node through the TS monitor tool. The monitoring tool queries basic cluster operation status information from it, retrieves error logs in the database through keywords, and echoes them.
+
 # Development environment
 
 ## Environmental Information
 1. [VSCode](https://code.visualstudio.com/Download) version v1.77+
-2. Install the recommended plugins in the. vscode directory with one click (VSCode will automatically pop up a window asking if to install the recommended extensions for this warehouse project, click Install to proceed)
-3. [Node.js](https://nodejs.org/en/download) version v16.14+
-4. Execute npm install pnpm@8.7.4, install version 8.7.4 of pnpm
+2. [Node.js](https://nodejs.org/en/download) version v16.14+
+3. pnpm version v8.7.4
+```
+npm install pnpm@8.7.4
+```
 
 ## Installation dependencies
 Install dependencies such as element plus (icon component library), axios (making HTTP requests), cors (handling cross domain requests), echarts (providing visual icons), and express (building web servers and APIs) required for the project.
+
+### Component Dependency
 1. Clone project
 ```
 git clone https://github.com/openGemini/openGemini-CM.git
@@ -29,6 +39,11 @@ cd openGemini-CM
 ```
 pnpm i
 ```
+
+### Install plugins (optional)
+Open the project main directory using VSCode, and VSCode will automatically pop up a window asking if to install the recommended extensions for this warehouse project. Click Install to proceed.
+The plugin path is. vscode/extensions. json, including ESLint, Prettier, Volar, and more.
+
 At this point, the development environment configuration has been completed and secondary development can proceed
 
 # Operating Environment
@@ -87,11 +102,7 @@ bash run_preview.sh
 
 # Service startup
 
-![openGemini架构图](https://github.com/25hours886/image/blob/main/openGemini-image/openGemini%E6%9E%B6%E6%9E%84.png)
-
-The cluster management tool is deployed on the management node, which also deploys a standalone OpenGemini temporal database to store various monitoring indicators of the OpenGemini business cluster, such as node resource monitoring indicators (CPU, memory, disk I/O), error logs, etc. The above indicator data is collected and written into the database of the management node through the TS monitor tool. The monitoring tool queries basic cluster operation status information from it, retrieves error logs in the database through keywords, and echoes them.
-
-## For example, using a standalone deployment of openGemini cluster and monitoring:
+Pull up the openGemini cluster and indicator collection tool ts monitor according to the deployment architecture, and take single machine deployment of openGemini cluster monitoring as an example:
 1. Enter the project directory and start the openGemini database
 ```
 sudo bash scripts/install_cluster.sh
@@ -151,5 +162,5 @@ The data information in the query table logs is as follows:
 ![配置文件生成](https://github.com/25hours886/image/blob/main/openGemini-image/%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E7%94%9F%E6%88%90.png)
 对配置项进行修改后，点击“保存配置文件”。或恢复默认配置文件。
 
-# License
+# LICENSE
 [Apache 2.0 许可证](./LICENSE)
